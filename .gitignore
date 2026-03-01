@@ -1,0 +1,55 @@
+# Dependencies
+/node_modules
+/vendor
+
+# Build outputs
+/public/build
+/public/hot
+/public/storage
+
+# Environment & Secrets
+.env
+.env.backup
+.env.production
+.env.local
+.env.*.local
+.env.example
+/storage/*.key
+
+# Laravel
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+/bootstrap/cache/*.php
+
+# Logs
+npm-debug.log
+yarn-error.log
+/storage/logs/*.log
+
+# IDE & Editors
+/.fleet
+/.idea
+/.vscode
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project Documentation (Private)
+Rangkuman_Proyek.txt
+struktur.txt
+
+# Testing
+/coverage
+.phpunit.result.cache
+
+# Misc
+*.cache
+*.bak
+*.tmp

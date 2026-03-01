@@ -1,0 +1,448 @@
+/* ===== BOOKING FORM STYLES ===== */
+/* For: resources/views/user/bookings/create_new.blade.php */
+
+/* Page Header */
+.booking-form-header {
+    background: rgba(59, 130, 246, 0.08);
+    padding: 2.5rem 2rem;
+    border-radius: 12px;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.booking-form-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -5%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.booking-form-header h2 {
+    color: var(--dark-text);
+    font-weight: 600;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.booking-form-header p {
+    color: var(--gray-text);
+    font-size: 1.05rem;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+}
+
+/* Progress Steps */
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    position: relative;
+    padding: 0 2rem;
+}
+
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    background: rgba(59, 130, 246, 0.2);
+    z-index: 0;
+}
+
+.progress-line {
+    position: absolute;
+    top: 25px;
+    left: 20%;
+    height: 3px;
+    background: var(--primary-green);
+    transition: width 0.5s ease;
+    z-index: 1;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.step-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid rgba(59, 130, 246, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--gray-text);
+    transition: all 0.4s ease;
+    margin-bottom: 0.5rem;
+}
+
+.step-circle i {
+    font-size: 1.3rem;
+}
+
+.step.active .step-circle {
+    background: var(--primary-green);
+    border-color: var(--primary-green);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.step.completed .step-circle {
+    background: var(--primary-green);
+    border-color: var(--primary-green);
+    color: white;
+}
+
+.step-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--gray-text);
+    text-align: center;
+    max-width: 100px;
+}
+
+.step.active .step-label {
+    color: var(--primary-green);
+    font-weight: 600;
+}
+
+/* Form Container */
+.booking-form-container {
+    background: white;
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* Form Groups */
+.form-group-modern {
+    margin-bottom: 1.75rem;
+}
+
+.form-group-modern label {
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-group-modern label i {
+    color: var(--primary-green);
+    font-size: 1.1rem;
+}
+
+.form-control-modern {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid rgba(59, 130, 246, 0.2);
+    border-radius: 12px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-control-modern:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+/* Icon Wrapper for Inputs */
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-green);
+    font-size: 1.2rem;
+}
+
+.input-with-icon .form-control-modern {
+    padding-left: 3.5rem;
+}
+
+/* Duration Pills */
+.duration-pills {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+}
+
+.duration-pill {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: 2px solid rgba(59, 130, 246, 0.2);
+    background: white;
+    color: var(--gray-text);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.duration-pill:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+    transform: translateY(-2px);
+}
+
+.duration-pill.active {
+    background: var(--primary-green);
+    border-color: var(--primary-green);
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Field Preview Card */
+.field-preview-card {
+    background: rgba(59, 130, 246, 0.05);
+    border-radius: 16px;
+    padding: 1.75rem;
+    border: 2px solid rgba(59, 130, 246, 0.15);
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.5s ease;
+}
+
+.field-preview-card h5 {
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.field-preview-card h5 i {
+    color: var(--primary-green);
+}
+
+.field-preview-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.field-preview-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.field-preview-label {
+    color: var(--gray-text);
+    font-weight: 600;
+}
+
+.field-preview-value {
+    color: var(--dark-text);
+    font-weight: 600;
+}
+
+/* Price Summary Card */
+.price-summary-card {
+    background: var(--primary-green);
+    border-radius: 12px;
+    padding: 2rem;
+    color: white;
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
+    position: sticky;
+    top: 100px;
+}
+
+.price-summary-card h5 {
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.price-breakdown {
+    margin-bottom: 1.5rem;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.85rem;
+    font-size: 0.95rem;
+    opacity: 0.95;
+}
+
+.price-divider {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 1.25rem 0;
+}
+
+.price-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* Navigation Buttons */
+.form-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2.5rem;
+}
+
+.btn-prev, .btn-next {
+    flex: 1;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-prev {
+    background: white;
+    color: var(--gray-text);
+    border: 2px solid rgba(59, 130, 246, 0.2);
+}
+
+.btn-prev:hover {
+    background: rgba(59, 130, 246, 0.05);
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+}
+
+.btn-next {
+    background: var(--primary-green);
+    color: white;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+}
+
+.btn-next:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(59, 130, 246, 0.45);
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+
+/* Extra Small Devices (phones, 576px and down) */
+@media (max-width: 576px) {
+    .booking-form-header {
+        padding: 1.75rem 1.25rem;
+    }
+
+    .booking-form-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .booking-form-header p {
+        font-size: 0.85rem;
+    }
+
+    .progress-steps {
+        padding: 0 0.5rem;
+    }
+
+    .step-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+    }
+
+    .step-circle i {
+        font-size: 1.1rem;
+    }
+
+    .step-label {
+        font-size: 0.7rem;
+        max-width: 70px;
+    }
+
+    .booking-form-container {
+        padding: 1.5rem;
+        border-radius: 16px;
+    }
+
+    .duration-pills {
+        gap: 0.5rem;
+    }
+
+    .duration-pill {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.8rem;
+    }
+
+    .price-summary-card {
+        position: static;
+        margin-top: 1.5rem;
+    }
+
+    .form-navigation {
+        flex-direction: column;
+    }
+
+    .btn-prev, .btn-next {
+        width: 100%;
+    }
+}
+
+/* Small to Medium Devices (577px to 768px) */
+@media (min-width: 577px) and (max-width: 768px) {
+    .booking-form-header {
+        padding: 2rem 1.5rem;
+    }
+
+    .booking-form-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .booking-form-container {
+        padding: 2rem;
+    }
+
+    .price-summary-card {
+        position: static;
+        margin-top: 2rem;
+    }
+}
+
+/* Medium Devices (tablets, 769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .price-summary-card {
+        position: static;
+        margin-top: 2rem;
+    }
+}

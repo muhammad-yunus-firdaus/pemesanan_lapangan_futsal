@@ -1,0 +1,309 @@
+/* ===== USER LAYOUT STYLES (app.blade.php) ===== */
+/* Sidebar, Navbar, Main Content, Mobile Menu */
+
+/* Sidebar - Clean & Modern */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #ffffff;
+    box-shadow: 1px 0 0 #e2e8f0;
+    padding: 1.5rem 0.875rem;
+    display: flex;
+    flex-direction: column;
+    z-index: 1040;
+    transition: transform 0.2s ease;
+}
+
+.sidebar.collapsed {
+    transform: translateX(-100%);
+}
+
+/* Brand Logo Section - Centered */
+.sidebar .brand-title {
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.sidebar .brand-title img {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-bottom: 0.75rem;
+}
+
+.sidebar .brand-title span {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Sidebar Navigation Links - Clean Style */
+.sidebar .nav-link {
+    color: #64748b;
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: 0.625rem 0.875rem;
+    margin: 2px 0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    transition: all 0.15s ease;
+    text-decoration: none;
+}
+
+.sidebar .nav-link i {
+    margin-right: 0.75rem;
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.sidebar .nav-link:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.sidebar .nav-link:hover i {
+    color: var(--primary, #3b82f6);
+}
+
+.sidebar .nav-link.active {
+    background: var(--primary, #3b82f6);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.sidebar .nav-link.active i {
+    color: #ffffff;
+}
+
+/* Contact Info */
+.sidebar .contact-info {
+    margin-top: auto;
+    padding: 1rem 0.75rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.sidebar .contact-info .contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.sidebar .contact-info .contact-item:last-child {
+    margin-bottom: 0;
+}
+
+.sidebar .contact-info .contact-item i {
+    width: 18px;
+    font-size: 0.875rem;
+    margin-right: 0.5rem;
+    color: #94a3b8;
+}
+
+/* Navbar - Clean */
+.main-navbar {
+    position: fixed;
+    top: 0;
+    left: 260px;
+    right: 0;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+    padding: 1rem 1.75rem;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.main-navbar h5 {
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.15rem;
+    color: #1e293b;
+}
+
+.main-navbar .user-info {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.main-navbar .user-name {
+    color: var(--gray-text);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.main-navbar .btn-outline-danger {
+    border-radius: 8px;
+    padding: 0.45rem 1rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    border-width: 1.5px;
+}
+
+.main-navbar .btn-outline-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 260px;
+    margin-top: 70px;
+    padding: 1.75rem;
+    min-height: calc(100vh - 70px);
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #f8fafc;
+}
+
+/* Mobile Menu Toggle - Clean */
+.mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1050;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.35);
+    font-size: 1.5rem;
+    transition: all 0.4s ease;
+    cursor: pointer;
+}
+
+.mobile-menu-toggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
+    background: #2563eb;
+}
+
+.mobile-menu-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Overlay untuk mobile */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1030;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+
+/* Extra Small Devices (phones, 576px and down) */
+@media (max-width: 576px) {
+    .sidebar {
+        width: 260px;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar .brand-title img {
+        width: 38px;
+        height: 38px;
+    }
+
+    .main-navbar {
+        left: 0;
+        padding: 0.85rem 1rem;
+    }
+
+    .main-navbar h5 {
+        font-size: 1rem;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+        margin-top: 60px;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+    }
+
+    .sidebar .contact-info {
+        font-size: 0.75rem;
+        padding: 1rem;
+    }
+    
+    .sidebar .nav-link {
+        font-size: 0.9rem;
+        padding: 10px 14px;
+        margin: 2px 0;
+    }
+}
+
+/* Small to Medium Devices (577px to 768px) */
+@media (min-width: 577px) and (max-width: 768px) {
+    .sidebar {
+        width: 260px;
+        transform: translateX(-100%);    }
+
+    .sidebar.show {
+        transform: translateX(0);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-navbar {
+        left: 0;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 1.25rem;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Ensure proper spacing on tablets and up */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .main-content {
+        padding: 1.5rem;
+    }
+}

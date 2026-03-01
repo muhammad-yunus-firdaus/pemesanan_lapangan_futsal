@@ -1,0 +1,39 @@
+// File: resources/sass/app.scss
+
+// Import modul Sass bawaan
+@use 'sass:color';
+
+// Import variabel buatan sendiri dengan alias "custom"
+@use 'variables' as custom;
+
+// Import Bootstrap dengan alias "bs"
+@use 'bootstrap/scss/bootstrap' as bs;
+
+// Import font eksternal
+@import url('https://fonts.bunny.net/css?family=Nunito');
+
+// Fungsi Sass kustom
+@function myColorFunction($color) {
+  @return color.red($color);
+}
+
+// Gunakan variabel dengan prefix agar tidak bentrok
+.some-class {
+  color: myColorFunction(custom.$primary-color);
+  font-family: 'Nunito', sans-serif;
+}
+
+body {
+  background-color: custom.$body-bg;
+  color: bs.$body-color;
+}
+
+.navbar {
+  background-color: myColorFunction(bs.$primary);
+  color: bs.$navbar-light-color;
+}
+
+.button-custom {
+  @extend .btn-primary;
+  background-color: darken(bs.$primary, 10%);
+}
