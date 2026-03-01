@@ -9,8 +9,13 @@ use App\Models\Field;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
+/**
+ * BookingController User - handle booking dari sisi user
+ * User cuma bisa lihat dan kelola booking miliknya sendiri
+ */
 class BookingController extends Controller
 {
+    // Tampilkan daftar booking user yang login
     public function index()
     {
         $bookings = Booking::where('user_id', Auth::id())
@@ -21,14 +26,14 @@ class BookingController extends Controller
         return view('user.bookings.index', compact('bookings'));
     }
 
-    // ========== CALENDAR VIEW ==========
+    // Tampilan kalender booking
     public function calendar()
     {
         $fields = Field::all();
         return view('user.bookings.calendar', compact('fields'));
     }
 
-// ========== API: GET CALENDAR BOOKINGS ==========
+    // API endpoint buat ambil data booking per bulan (dipake kalender)
     public function getCalendarBookings(Request $request)
     {
         $fieldId = $request->input('field_id');
@@ -61,7 +66,7 @@ class BookingController extends Controller
                 'id' => $booking->id,
                 'user_name' => $booking->user->name,
                 'field_name' => $booking->field->name,
-                'field_id' => $booking->field_id, // 🔥 TAMBAHKAN INI
+                'field_id' => $booking->field_id,
                 'start_time' => Carbon::parse($booking->booking_time)->format('H:i'),
                 'end_time' => Carbon::parse($booking->booking_time)->addHours($booking->duration)->format('H:i'),
                 'duration' => $booking->duration,
@@ -75,12 +80,14 @@ class BookingController extends Controller
         ]);
     }
 
+    // Form buat booking baru
     public function create()
     {
         $fields = Field::all();
         return view('user.bookings.create', compact('fields'));
     }
 
+    // Proses simpan booking baru
     public function store(Request $request)
     {
         $request->validate([
@@ -138,6 +145,7 @@ class BookingController extends Controller
         return redirect()->route('user.bookings.index')->with('success', 'Booking berhasil dibuat!');
     }
 
+    // Lihat detail booking (cuma bisa lihat punya sendiri)
     public function show(Booking $booking)
     {
         if($booking->user_id != Auth::id()){
@@ -147,6 +155,7 @@ class BookingController extends Controller
         return view('user.bookings.show', compact('booking'));
     }
 
+    // Batalkan booking (status jadi cancelled)
     public function destroy(Booking $booking)
     {
         if($booking->user_id != Auth::id()){

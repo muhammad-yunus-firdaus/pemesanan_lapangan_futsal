@@ -9,9 +9,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 
+/**
+ * BookingController Admin - kelola semua booking
+ * Admin bisa lihat, bikin, edit, hapus booking user
+ */
 class BookingController extends Controller
 {
-    // Menampilkan daftar booking
+    // Ambil semua booking, urutkan dari yang terbaru
     public function index()
     {
         $bookings = Booking::with(['user', 'field'])
@@ -21,7 +25,7 @@ class BookingController extends Controller
         return view('admin.bookings.index', compact('bookings'));
     }
 
-    // Form tambah booking
+    // Tampilkan form buat booking baru
     public function create()
     {
         $fields = Field::all();
@@ -29,7 +33,7 @@ class BookingController extends Controller
         return view('admin.bookings.create', compact('fields', 'users'));
     }
 
-    // Simpan booking baru
+    // Proses simpan booking ke database
     public function store(Request $request)
     {
         $request->validate([
@@ -88,7 +92,7 @@ class BookingController extends Controller
         return redirect()->route('admin.bookings.index')->with('success', 'Booking berhasil dibuat!');
     }
 
-    // Form edit booking
+    // Tampilkan form edit booking
     public function edit(Booking $booking)
     {
         $fields = Field::all();
@@ -96,7 +100,7 @@ class BookingController extends Controller
         return view('admin.bookings.edit', compact('booking', 'fields', 'users'));
     }
 
-    // Update booking
+    // Proses update data booking
     public function update(Request $request, Booking $booking)
     {
         $request->validate([
@@ -152,14 +156,14 @@ class BookingController extends Controller
         return redirect()->route('admin.bookings.index')->with('success', 'Booking berhasil diupdate!');
     }
 
-    // Hapus booking
+    // Hapus booking dari database
     public function destroy(Booking $booking)
     {
         $booking->delete();
         return redirect()->route('admin.bookings.index')->with('success', 'Booking berhasil dihapus!');
     }
 
-    // Tandai booking selesai
+    // Ubah status jadi completed (selesai main)
     public function complete(Booking $booking)
     {
         $booking->status = 'completed';

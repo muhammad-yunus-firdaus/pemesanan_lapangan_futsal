@@ -4,35 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+/**
+ * HomeController - handle dashboard user setelah login
+ * Tampilkan ringkasan booking dan match yang akan datang
+ */
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
+        // Wajib login dulu baru bisa akses
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+    // Halaman dashboard user
     public function index()
     {
         $user = auth()->user();
         
-        // Quick Stats
+        // Hitung statistik booking user
         $stats = [
             'total_bookings' => $user->bookings()->count(),
             'active_bookings' => $user->bookings()->whereIn('status', ['confirmed', 'completed'])->count(),
             'total_spent' => $user->bookings()->where('status', 'completed')->sum('total_price'),
         ];
 
-        // Upcoming Match: Include both pending and confirmed matches that haven't occurred yet
+        // Cari booking terdekat yang belum selesai
         $upcomingMatch = $user->bookings()
             ->whereIn('status', ['pending', 'confirmed'])
             ->where('booking_time', '>=', now())

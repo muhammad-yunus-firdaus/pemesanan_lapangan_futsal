@@ -11,10 +11,14 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * AdminController - handle halaman dashboard admin
+ * Nampilin statistik, grafik, dan ringkasan data booking
+ */
 class AdminController extends Controller
 {
     /**
-     * Alias/index untuk mengarahkan ke dashboard
+     * Redirect ke dashboard (kalo ada yang akses /admin aja)
      */
     public function index()
     {
@@ -22,12 +26,12 @@ class AdminController extends Controller
     }
 
     /**
-     * Tampilkan halaman dashboard dengan data statistik lengkap
-     * Menggunakan cache untuk optimasi performa
+     * Halaman utama admin - dashboard dengan semua statistik
+     * Data di-cache biar ga berat tiap kali load
      */
     public function dashboard()
     {
-        // === STATISTIK DASAR (Cache 5 menit) ===
+        // Hitung total user, lapangan, booking (cache 5 menit)
         $totalUsers = Cache::remember('dashboard_total_users', 300, function () {
             return User::count();
         });
@@ -40,12 +44,12 @@ class AdminController extends Controller
             return Booking::count();
         });
 
-        // Total Pendapatan (Cache 5 menit)
+        // Hitung total pendapatan dari booking yang confirmed/completed
         $totalRevenue = Cache::remember('dashboard_total_revenue', 300, function () {
             return Booking::whereIn('status', ['confirmed', 'completed'])->sum('total_price');
         });
         
-        // Pendapatan Bulan Ini (Cache 5 menit)
+        // Pendapatan bulan ini aja
         $monthKey = 'dashboard_monthly_revenue_' . Carbon::now()->format('Y_m');
         $monthlyRevenue = Cache::remember($monthKey, 300, function () {
             return Booking::whereIn('status', ['confirmed', 'completed'])
@@ -54,19 +58,15 @@ class AdminController extends Controller
                 ->sum('total_price');
         });
 
-        // === STATISTIK TAMBAHAN (Tidak di-cache karena berubah cepat) ===
-        
-        // Booking Hari Ini
+        // Data yang sering berubah - ga pake cache
         $bookingsToday = Booking::whereDate('booking_time', Carbon::today())->count();
-
-        // Booking Pending
         $bookingsPending = Booking::where('status', 'pending')->count();
 
-        // Tingkat Okupansi (Cache 10 menit)
+        // Hitung tingkat okupansi (persen lapangan terpakai bulan ini)
         $occupancyKey = 'dashboard_occupancy_' . Carbon::now()->format('Y_m');
         $occupancyRate = Cache::remember($occupancyKey, 600, function () use ($totalFields) {
             $daysInMonth = Carbon::now()->daysInMonth;
-            $operatingHours = 14; // 08:00 - 22:00 = 14 jam
+            $operatingHours = 14; // jam operasional 08:00-22:00
             $maxSlots = $totalFields * $daysInMonth * $operatingHours;
             
             $bookingsThisMonth = Booking::whereMonth('booking_time', Carbon::now()->month)
@@ -77,9 +77,7 @@ class AdminController extends Controller
             return $maxSlots > 0 ? round(($bookingsThisMonth / $maxSlots) * 100, 1) : 0;
         });
 
-        // === DATA UNTUK CHART (Cache 5 menit) ===
-
-        // 1. Line Chart: Tren Booking 7 Hari Terakhir
+        // Data untuk line chart - tren booking 7 hari terakhir
         $trendKey = 'dashboard_trend_' . Carbon::today()->format('Y_m_d');
         $trendData = Cache::remember($trendKey, 300, function () {
             $last7Days = [];
@@ -98,7 +96,7 @@ class AdminController extends Controller
         $last7Days = $trendData['days'];
         $bookingTrend = $trendData['trend'];
 
-        // 2. Bar Chart: Lapangan Paling Populer (Cache 10 menit)
+        // Data untuk bar chart - ranking lapangan berdasarkan jumlah booking
         $popularData = Cache::remember('dashboard_popular_fields', 600, function () {
             $popularFields = Booking::select('field_id', DB::raw('COUNT(*) as total'))
                 ->with('field:id,name')
@@ -117,7 +115,7 @@ class AdminController extends Controller
         $fieldNames = $popularData['names'];
         $fieldBookings = $popularData['bookings'];
 
-        // 3. Pie Chart: Distribusi Status Booking (Cache 5 menit)
+        // Data untuk pie chart - distribusi status booking
         $statusChartData = Cache::remember('dashboard_status_chart', 300, function () {
             $statusDistribution = Booking::select('status', DB::raw('COUNT(*) as total'))
                 ->groupBy('status')
@@ -146,7 +144,7 @@ class AdminController extends Controller
         $statusData = $statusChartData['data'];
         $chartColors = $statusChartData['colors'];
 
-        // === BOOKING TERBARU (Tidak di-cache, selalu fresh) ===
+        // Ambil 5 booking terbaru (ga di-cache biar selalu fresh)
         $recentBookings = Booking::with(['user:id,name', 'field:id,name'])
             ->orderBy('created_at', 'desc')
             ->limit(5)
@@ -154,19 +152,14 @@ class AdminController extends Controller
 
         // Kirim semua data ke view
         return view('admin.dashboard', compact(
-            // Statistik dasar
             'totalUsers',
             'totalFields',
             'totalBookings',
             'totalRevenue',
             'monthlyRevenue',
-            
-            // Statistik tambahan
             'bookingsToday',
             'bookingsPending',
             'occupancyRate',
-            
-            // Data chart
             'last7Days',
             'bookingTrend',
             'fieldNames',
@@ -174,8 +167,6 @@ class AdminController extends Controller
             'statusLabels',
             'statusData',
             'chartColors',
-            
-            // Recent bookings
             'recentBookings'
         ));
     }

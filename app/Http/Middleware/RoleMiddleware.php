@@ -6,37 +6,33 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * RoleMiddleware - cek role user sebelum akses halaman
+ * Misal admin mau akses halaman user, bakal ditolak
+ */
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|array  $role
-     * @return mixed
-     */
+    // Cek apakah role user sesuai dengan yang diminta
     public function handle(Request $request, Closure $next, $role)
     {
-        // Cek apakah user sudah login
+        // Belum login? balik ke halaman login
         if (!Auth::check()) {
-            return redirect('/login'); // Redirect jika user belum login
+            return redirect('/login');
         }
 
-        // Cek apakah role yang diberikan adalah array atau string
+        // Cek rolenya, bisa satu atau banyak
         if (is_array($role)) {
-            // Jika ada beberapa role, periksa apakah role user ada di dalam array
+            // Kalo role ga ada di list yang dibolehkan
             if (!in_array(Auth::user()->role, $role)) {
-                abort(403, 'Unauthorized action.'); // Tampilkan error 403 jika role tidak sesuai
+                abort(403, 'Unauthorized action.');
             }
         } else {
-            // Jika hanya ada satu role, periksa apakah role user sesuai
+            // Role tunggal, langsung bandingin
             if (Auth::user()->role !== $role) {
-                abort(403, 'Unauthorized action.'); // Tampilkan error 403 jika role tidak sesuai
+                abort(403, 'Unauthorized action.');
             }
         }
 
-        // Melanjutkan request ke proses selanjutnya jika valid
         return $next($request);
     }
 }

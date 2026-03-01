@@ -6,21 +6,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Model Field - data lapangan futsal
+ * Nyimpen info nama, harga per jam, deskripsi, sama gambar lapangan
+ */
 class Field extends Model
 {
     use HasFactory;
 
-    // Tambahkan 'image' supaya bisa diisi lewat mass assignment
+    // Kolom yang boleh diisi
     protected $fillable = [
-        'name', 'price_per_hour', 'description', 'image'
+        'name', 
+        'price_per_hour', 
+        'description', 
+        'image'
     ];
 
     /**
-     * Boot method untuk clear cache saat data berubah
+     * Auto clear cache tiap kali data field berubah
+     * Jadi dashboard selalu dapet data terbaru
      */
     protected static function booted()
     {
-        // Clear cache saat field dibuat, diupdate, atau dihapus
         static::saved(function () {
             self::clearFieldCache();
         });
@@ -31,7 +38,7 @@ class Field extends Model
     }
 
     /**
-     * Hapus cache yang terkait field
+     * Hapus semua cache yang nyimpen data field
      */
     public static function clearFieldCache()
     {
@@ -40,7 +47,9 @@ class Field extends Model
         Cache::forget('dashboard_popular_fields');
     }
 
-    // Relasi dengan model Booking
+    /**
+     * Relasi ke Booking - satu lapangan bisa dipake banyak booking
+     */
     public function bookings()
     {
         return $this->hasMany(Booking::class);

@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * Model Booking - data pemesanan lapangan
+ * Nyimpen siapa yang booking, lapangan mana, kapan, berapa lama, dan statusnya
+ */
 class Booking extends Model
 {
     use HasFactory;
 
-    /**
-     * Kolom yang dapat diisi secara massal.
-     *
-     * @var array
-     */
+    // Kolom yang boleh diisi
     protected $fillable = [
         'user_id',
         'field_id',
@@ -24,12 +24,26 @@ class Booking extends Model
         'status',
     ];
 
+    // Kolom tanggal biar otomatis jadi Carbon instance
+    protected $dates = [
+        'booking_time', 
+        'created_at', 
+        'updated_at',
+    ];
+
+    // Casting tipe data
+    protected $casts = [
+        'booking_time' => 'datetime',
+        'total_price' => 'float',
+        'duration' => 'integer',
+    ];
+
     /**
-     * Boot method untuk clear cache saat data berubah
+     * Auto clear cache tiap kali data booking berubah
+     * Biar statistik di dashboard selalu update
      */
     protected static function booted()
     {
-        // Clear cache saat booking dibuat, diupdate, atau dihapus
         static::saved(function () {
             self::clearDashboardCache();
         });
@@ -40,7 +54,7 @@ class Booking extends Model
     }
 
     /**
-     * Hapus cache dashboard yang terkait booking
+     * Hapus cache dashboard yang nyimpen data booking
      */
     public static function clearDashboardCache()
     {
@@ -48,34 +62,10 @@ class Booking extends Model
         Cache::forget('dashboard_total_revenue');
         Cache::forget('dashboard_status_chart');
         Cache::forget('dashboard_popular_fields');
-        // Cache dengan key dinamis akan expire sendiri
     }
-    /**
-     * Kolom yang harus dianggap sebagai tipe Carbon.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'booking_time', 
-        'created_at', 
-        'updated_at',
-    ];
 
     /**
-     * Konversi tipe data untuk kolom tertentu.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'booking_time' => 'datetime',
-        'total_price' => 'float', // Pastikan tipe total_price dikonversi ke float
-        'duration' => 'integer', // Pastikan tipe durasi integer
-    ];
-
-    /**
-     * Relasi dengan model User.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Relasi ke User - booking ini punya siapa
      */
     public function user()
     {
@@ -83,9 +73,7 @@ class Booking extends Model
     }
 
     /**
-     * Relasi dengan model Field.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Relasi ke Field - booking ini untuk lapangan mana
      */
     public function field()
     {
@@ -93,11 +81,8 @@ class Booking extends Model
     }
 
     /**
-     * Scope untuk mendapatkan booking milik user tertentu.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $userId
-     * @return \Illuminate\Database\Eloquent\Builder
+     * Scope buat filter booking berdasarkan user
+     * Pakenya: Booking::forUser($userId)->get()
      */
     public function scopeForUser($query, $userId)
     {
@@ -105,11 +90,8 @@ class Booking extends Model
     }
 
     /**
-     * Scope untuk mendapatkan booking berdasarkan status tertentu.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $status
-     * @return \Illuminate\Database\Eloquent\Builder
+     * Scope buat filter booking berdasarkan status
+     * Pakenya: Booking::withStatus('confirmed')->get()
      */
     public function scopeWithStatus($query, $status)
     {
